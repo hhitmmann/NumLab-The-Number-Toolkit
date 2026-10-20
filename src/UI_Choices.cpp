@@ -5,20 +5,22 @@
 #include "Project1/Data_Type_Converter.h"
 #include "Project1/Overflow_Precision.h"
 #include "Project1/Operator_Lab.h"
+#include "Project1/ClearScreen.h"
 #include <cstdlib>
 #include <iostream>
 
 
 void UI(){
-std::cout<<"Main Menu\n";
-std::cout<<"Please enter  your Choice (1~0) : \n";
-std::cout<<"1. Calculator\n";
-std::cout<<"2. Scientific Functions\n";
-std::cout<<"3. Base Converter\n";
-std::cout<<"4. Data Type Converter\n";
-std::cout<<"5. Overflow & precision lab\n";
-std::cout<<"6. Operator lab\n";
-std::cout<<"0. Exit\n";
+    ClearScreen();
+    std::cout<<"Main Menu\n";
+    std::cout<<"Please enter  your Choice (1~0) : \n";
+    std::cout<<"1. Calculator\n";
+    std::cout<<"2. Scientific Functions\n";
+    std::cout<<"3. Base Converter\n";
+    std::cout<<"4. Data Type Converter\n";
+    std::cout<<"5. Overflow & precision lab\n";
+    std::cout<<"6. Operator lab\n";
+    std::cout<<"0. Exit\n";
 }
 
 
