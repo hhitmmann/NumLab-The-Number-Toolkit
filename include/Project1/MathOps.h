@@ -9,7 +9,7 @@ double modulus(double &a, double b);
 double factorial(double &a);
 double squareRoot(double &a);
 double absolute(double &a);
-double logs(double &a);
-double anti_log(double &a);
+double logarithm(double &a);
+double anti_logarithm(double &a);
 
 // Each takes doubles and returns a double.

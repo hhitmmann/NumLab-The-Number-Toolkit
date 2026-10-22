@@ -10,7 +10,6 @@
 #include "Project1/ClearScreen.h"
 
 
-
 int main(){
     char ch;
     do{

@@ -103,11 +103,11 @@ void CalculatorChoices(char &op){
     }
     else if(op=='l'){
         std::cout<<"Logarithm is selected\n";
-        log(n1);
+        logarithm(n1);
     }
     else if(op=='a'){
         std::cout<<"Anti-Logarithm is selected\n";
-        anti_log(n1);
+        anti_logarithm(n1);
     }
     else if(op=='v'){
         std::cout<<"Absolute value is selected\n";
@@ -117,5 +117,3 @@ void CalculatorChoices(char &op){
         std::cout<<"Wrong operator entered!\nThis operator does not exist...\n";
     }
 }
-
-

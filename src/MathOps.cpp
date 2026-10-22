@@ -103,7 +103,7 @@ double absolute(double &a){
     return std::abs(a);
 }
 
-double log(double &a){
+double logarithm(double &a){
     char base;
     std::cout << "  2  ->  Log base 2\n";
     std::cout << "  t  ->  Log base 10\n";
@@ -112,10 +112,9 @@ double log(double &a){
     if(!(std::cin>>base)) return;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     LogTypes(base,a);
-    
 }
 
-double anti_log(double &a){
+double anti_logarithm(double &a){
     char base;
     double number;
     std::cout << "  2  ->  Anti-Log base 2\n";
@@ -170,7 +169,6 @@ static void LogTypes(char &base,double &n1){
         std::cout<<"Wrong Log Base entered!\nThis Log Base does not exist...\n";
     }
 }
-
 
 
 static void AntiLogTypes(char &base,double &n1){
