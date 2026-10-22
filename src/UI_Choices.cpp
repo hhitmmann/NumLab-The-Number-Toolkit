@@ -8,6 +8,12 @@
 #include "Project1/ClearScreen.h"
 #include <cstdlib>
 #include <iostream>
+#include <cmath>
+#include <limits>
+#include <iomanip>
+#include <cctype>
+#include <string>
+#include <algorithm>
 
 
 void UI(){
@@ -52,3 +58,26 @@ default:
     break;
 }
 }
+
+
+bool askYesNo(const char* prompt){
+    std::string answer;
+    while(true){
+        std::cout << prompt;
+        if(!(std::cin >> answer)) return false;   // input closed: stop
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        answer = toLower(answer);
+        if(answer == "y" || answer == "yes" || answer == "ye") return true;
+        if(answer == "n" || answer == "no")  return false;
+        std::cout << "Invalid choice! Please enter 'y' or 'n'.\n";
+    }
+}
+
+
+std::string toLower(std::string s){
+    std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c){
+        return std::tolower(c);
+    });
+    return s;
+}
+
