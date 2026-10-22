@@ -16,17 +16,19 @@
 #include <algorithm>
 
 
+bool readNumber(const char* prompt, double& out);
+void showAnswer(double value);
 void UI(){
     ClearScreen();
     std::cout<<"Main Menu\n";
     std::cout<<"Please enter  your Choice (1~0) : \n";
-    std::cout<<"1. Calculator\n";
-    std::cout<<"2. Scientific Functions\n";
-    std::cout<<"3. Base Converter\n";
-    std::cout<<"4. Data Type Converter\n";
-    std::cout<<"5. Overflow & precision lab\n";
-    std::cout<<"6. Operator lab\n";
-    std::cout<<"0. Exit\n";
+    std::cout<<"1 -> Calculator\n";
+    std::cout<<"2 -> Scientific Functions\n";
+    std::cout<<"3 -> Base Converter\n";
+    std::cout<<"4 -> Data Type Converter\n";
+    std::cout<<"5 -> Overflow & precision lab\n";
+    std::cout<<"6 -> Operator lab\n";
+    std::cout<<"0 -> Exit\n";
 }
 
 
@@ -79,5 +81,27 @@ std::string toLower(std::string s){
         return std::tolower(c);
     });
     return s;
+}
+
+
+// Keeps asking until a valid number is typed. Returns false only if input is closed (EOF).
+bool readNumber(const char* prompt, double& out){
+    while(true){
+        std::cout << prompt;
+        if(std::cin >> out){
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // drop anything left on the line
+            return true;
+        }
+        if(std::cin.eof() || std::cin.bad()) return false;   // nothing more to read
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Invalid number! Try again.\n";
+    }
+}
+
+// Prints the answer and stores it, so it becomes the first number of the next round.
+void showAnswer(double value){
+    double memory = value;
+    std::cout<<"Answer : "<<memory<<"\n";
 }
 
