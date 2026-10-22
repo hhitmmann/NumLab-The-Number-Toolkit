@@ -1,10 +1,6 @@
 #include "Project1/UI_Choices.h"
 #include "Project1/Calculator.h"
-#include "Project1/Scientific_Function.h"
 #include "Project1/Base_Converter.h"
-#include "Project1/Data_Type_Converter.h"
-#include "Project1/Overflow_Precision.h"
-#include "Project1/Operator_Lab.h"
 #include "Project1/ClearScreen.h"
 #include <cstdlib>
 #include <iostream>
@@ -109,8 +105,7 @@ double logarithm(double &a){
     std::cout << "  t  ->  Log base 10\n";
     std::cout << "  e  ->  Log base e(ln)\n";
     std::cout<<"Select Log Base: ";
-    if(!(std::cin>>base)) return;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    if(readBase("Enter Log Base: ", base));
     LogTypes(base,a);
 }
 
@@ -121,7 +116,7 @@ double anti_logarithm(double &a){
     std::cout << "  t  ->  Anti-Log base 10\n";
     std::cout << "  e  ->  Anti-Log base e(ln)\n";
     std::cout<<"Select Anti-Log Base: ";
-    if(!(std::cin>>base)) return;
+    if(readBase("Enter Anti-Log Base: ", base));
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     AntiLogTypes(base,a);
 }
@@ -216,5 +211,20 @@ static void AntiLogTypes(char &base,double &n1){
     }
     else{
         std::cout<<"Wrong Anti-Log Base entered!\nThis Anti-Log Base does not exist...\n";
+    }
+}
+
+
+bool readBase(const char *prompt, char &out){
+    while(true){
+        std::cout << prompt;
+        if(std::cin >> out){
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // drop anything left on the line
+            return true;
+        }
+        if(std::cin.eof() || std::cin.bad()) return false;   // nothing more to read
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Invalid Base input! Try again.\n";
     }
 }

@@ -16,8 +16,6 @@
 #include <algorithm>
 
 
-bool readNumber(const char* prompt, double& out);
-void showAnswer(double value);
 void UI(){
     ClearScreen();
     std::cout<<"Main Menu\n";

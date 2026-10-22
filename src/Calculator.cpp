@@ -11,9 +11,6 @@
 #include <algorithm>
 
 
-static bool readNumber(const char* prompt, double& out);
-static void showAnswer(double value);
-
 double n1{}, n2{}, memory{}; // Global variables to store numbers and memory
 
 void Calculator(){
