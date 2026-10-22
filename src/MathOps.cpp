@@ -1,4 +1,5 @@
 #include "Project1/UI_Choices.h"
+#include "Project1/MathOps.h"
 #include "Project1/Calculator.h"
 #include "Project1/Base_Converter.h"
 #include "Project1/ClearScreen.h"
@@ -12,8 +13,9 @@
 #include <algorithm>
 
 
-static void LogTypes(char &base,double &n1);
-static void AntiLogTypes(char &base,double &n1);
+static double LogTypes(char &base,double &n1);
+static double AntiLogTypes(char &base,double &n1);
+static bool readBase(const char *prompt, char &out);
 
 double add(double &a, double &b){
     return (a + b);
@@ -104,122 +106,123 @@ double logarithm(double &a){
     std::cout << "  2  ->  Log base 2\n";
     std::cout << "  t  ->  Log base 10\n";
     std::cout << "  e  ->  Log base e(ln)\n";
-    std::cout<<"Select Log Base: ";
-    if(readBase("Enter Log Base: ", base));
-    LogTypes(base,a);
+    if(!readBase("Select Log Base: ", base)){
+       std::cout<<"No valid base selected.\n";
+       return std::numeric_limits<double>::quiet_NaN();
+    }
+    return LogTypes(base, a);
 }
 
 double anti_logarithm(double &a){
     char base;
-    double number;
     std::cout << "  2  ->  Anti-Log base 2\n";
     std::cout << "  t  ->  Anti-Log base 10\n";
     std::cout << "  e  ->  Anti-Log base e(ln)\n";
-    std::cout<<"Select Anti-Log Base: ";
-    if(readBase("Enter Anti-Log Base: ", base));
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    AntiLogTypes(base,a);
+    if(!readBase("Enter Anti-Log Base: ", base)){
+        std::cout<<"No valid base selected.\n";
+        return std::numeric_limits<double>::quiet_NaN();
+    }
+    return AntiLogTypes(base,a); 
 }
 
 
-static void LogTypes(char &base,double &n1){
+static double LogTypes(char &base,double &n1){
     if(base=='2'){
         std::cout<<"Log base 2 is selected\n";
         if(n1<0){
-            std::cout<<"Logarithm is not defined for negative numbers\n";
+            return std::numeric_limits<double>::quiet_NaN();
         }
         else if(n1==0){
-            showAnswer(-std::numeric_limits<double>::infinity());
+            return -std::numeric_limits<double>::infinity();
         }
         else{
-            showAnswer(std::log2(n1));
+            return std::log2(n1);
         }
     }
     else if(base=='t'){
         std::cout<<"Log base 10 is selected\n";
         if(n1 < 0){
-            std::cout<<"Logarithm is not defined for negative numbers\n";
+            return std::numeric_limits<double>::quiet_NaN();
         }
         else if(n1 == 0){
-            showAnswer(-std::numeric_limits<double>::infinity());
+            return -std::numeric_limits<double>::infinity();
         }
         else{
-            showAnswer(std::log10(n1));
+            return std::log10(n1);
         }
     }
     else if(base=='e'){
         std::cout<<"Log base e(Natural Logarithm) is selected\n";
 
         if(n1<0){
-            std::cout<<"Natural Logarithm is not defined for negative numbers\n";
+            return std::numeric_limits<double>::quiet_NaN();
         }
         else if(n1==0){
-            showAnswer(-std::numeric_limits<double>::infinity());
+            return -std::numeric_limits<double>::infinity();
         }
         else{
-            showAnswer(std::log(n1));
+            return std::log(n1);
         }
     }
     else{
         std::cout<<"Wrong Log Base entered!\nThis Log Base does not exist...\n";
+        return std::numeric_limits<double>::quiet_NaN();
     }
 }
 
 
-static void AntiLogTypes(char &base,double &n1){
+static double AntiLogTypes(char &base,double &n1){
     if(base=='2'){
         std::cout<<"Anti-Log base 2 is selected\n";
         double result = std::pow(2.0, n1);
         if(std::isinf(result)){
-            std::cout<<"Anti-logarithm overflow : result too large for double\n";
+            return std::numeric_limits<double>::quiet_NaN();
         }
         else if(result == 0.0){
-            std::cout<<"Anti-logarithm underflow : result too small (approaches 0)\n";
+            return std::numeric_limits<double>::quiet_NaN();
         }
         else{
-            showAnswer(result);
+            return result;
         }
     }
     else if(base=='t'){
         std::cout<<"Anti-Log base 10 is selected\n";
-
         double result = std::pow(10.0, n1);
-
         if(std::isinf(result)){
-            std::cout<<"Anti-logarithm overflow : result too large for double\n";
+            return std::numeric_limits<double>::infinity();
         }
         else if(result == 0.0 && n1 < 0.0){
-            std::cout<<"Anti-logarithm underflow : result too small (approaches 0)\n";
+            return std::numeric_limits<double>::quiet_NaN();
         }
         else{
-            showAnswer(result);
+            return result;
         }
     }
     else if(base=='e'){
         std::cout<<"Anti-Log base e (Natural AntiLogarithm) is selected\n";
-
         double result = std::exp(n1);
         if(std::isinf(result)){
-            std::cout<<"Anti-Natural Logarithm overflow\n";
+            return std::numeric_limits<double>::infinity();
         }
-        else if( result == 0.0){
-            std::cout<<"Anti-Natural Logarithm underflow\n";
+        else if(result == 0.0){
+            return std::numeric_limits<double>::quiet_NaN();
         }
         else{
-            showAnswer(result);
+            return result;
         }
     }
     else{
         std::cout<<"Wrong Anti-Log Base entered!\nThis Anti-Log Base does not exist...\n";
+        return std::numeric_limits<double>::quiet_NaN();
     }
 }
 
 
-bool readBase(const char *prompt, char &out){
+static bool readBase(const char *prompt, char &out){
     while(true){
         std::cout << prompt;
         if(std::cin >> out){
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // drop anything left on the line
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             return true;
         }
         if(std::cin.eof() || std::cin.bad()) return false;   // nothing more to read

@@ -100,11 +100,12 @@ void CalculatorChoices(char &op){
     }
     else if(op=='l'){
         std::cout<<"Logarithm is selected\n";
-        logarithm(n1);
+        showAnswer(logarithm(n1));
+
     }
     else if(op=='a'){
         std::cout<<"Anti-Logarithm is selected\n";
-        anti_logarithm(n1);
+        showAnswer(anti_logarithm(n1));
     }
     else if(op=='v'){
         std::cout<<"Absolute value is selected\n";

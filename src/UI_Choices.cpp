@@ -96,10 +96,11 @@ bool readNumber(const char* prompt, double& out){
         std::cout << "Invalid number! Try again.\n";
     }
 }
+extern double memory;
 
 // Prints the answer and stores it, so it becomes the first number of the next round.
 void showAnswer(double value){
-    double memory = value;
+    memory = value;
     std::cout<<"Answer : "<<memory<<"\n";
 }
 
