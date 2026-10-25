@@ -56,6 +56,18 @@ void CalculatorUI(){
     std::cout<<"log     ->  Logarithm\n";
     std::cout<<"antilog ->  Anti-logarithm\n";
     std::cout<<"abs     ->  absolute value\n";
+    std::cout<<"sin     ->  sin\n";
+    std::cout<<"abs     ->  cos\n";
+    std::cout<<"abs     ->  tan\n";
+    std::cout<<"abs     ->  arcsin\n";
+    std::cout<<"abs     ->  arccos\n";
+    std::cout<<"abs     ->  arctan\n";
+    std::cout<<"abs     ->  sinh\n";
+    std::cout<<"abs     ->  cosh\n";
+    std::cout<<"abs     ->  tanh\n";
+    std::cout<<"abs     ->  arcsinh\n";
+    std::cout<<"abs     ->  arccosh\n";
+    std::cout<<"abs     ->  arctanh\n";
 }
 
 // n1 (the first number) is already set by Calculator(), so each branch only asks

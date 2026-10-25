@@ -217,7 +217,7 @@ double ATANH(double a){
 
 
 static double Radians_To_Degree(double &Rad){
-    double Degree = Rad*(pi/180);
+    double Degree = Rad*(180/pi);
     return Degree;
 }
 
