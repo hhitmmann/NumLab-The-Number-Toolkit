@@ -1,5 +1,5 @@
 #pragma once
-
+#include <string>
 void Calculator();
 void CalculatorUI();
-void CalculatorChoices(char &op);
+void CalculatorChoices(std::string &op);

@@ -100,7 +100,10 @@ extern double memory;
 
 // Prints the answer and stores it, so it becomes the first number of the next round.
 void showAnswer(double value){
+    if(!std::isfinite(value)){          // true for nan, +inf and -inf
+        std::cout << "Math error: no valid answer\n";
+        return;                         // memory keeps its old value
+    }
     memory = value;
-    std::cout<<"Answer : "<<memory<<"\n";
+    std::cout << "Answer : " << memory << "\n";
 }
-
