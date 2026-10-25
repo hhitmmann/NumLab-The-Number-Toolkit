@@ -1,5 +1,11 @@
 # NumLab – The Number Toolkit
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![C++20](https://img.shields.io/badge/C%2B%2B-20-00599C.svg)
+<!-- Uncomment the next line once the Actions tab shows a green build:
+[![Build](https://github.com/hhitmmann/NumLab-The-Number-Toolkit/actions/workflows/build.yml/badge.svg)](https://github.com/hhitmmann/NumLab-The-Number-Toolkit/actions/workflows/build.yml)
+-->
+
 A console toolkit written in C++ for working with numbers. It starts with a calculator and is growing into a set of small tools: scientific functions, base and data-type converters, and labs for exploring overflow, precision and operators.
 
 > **Status:** work in progress. The calculator works; the other modules are planned (see [Modules](#modules)).
@@ -40,13 +46,14 @@ Enter a first number, choose an operator, and enter a second number if the opera
 | `sinh`, `cosh`, `tanh` | Hyperbolic functions | nothing |
 | `arcsinh`, `arccosh`, `arctanh` | Inverse hyperbolic functions | nothing |
 
-Trigonometric functions work in **degrees**. The hyperbolic functions work on plain numbers, not angles. Radian and gradian modes are planned (see [Roadmap](#roadmap)).
+Trigonometric functions work in **degrees**. The hyperbolic functions work on plain numbers, not angles. Radian and gradian modes are planned (see [Roadmap](#roadmap)). A value outside a function's domain (for example `arcsin` of 2, or `arccosh` of 0.5) reports a math error.
 
 **Features**
 
 - **Result chaining:** the previous answer is shown as `First number (carried over)` and becomes the next first number.
 - **Input checking:** an invalid number or menu choice is re-requested instead of crashing the program.
 - **Clear messages:** problems such as the square root of a negative number, a factorial of a non-whole number or modulus by zero print an explanation.
+- **Safe errors:** when an operation has no valid answer, a math error is shown and the previous value is kept, so one mistake does not spoil the rest of a calculation.
 - **Cross-platform:** the console is cleared between rounds on Windows, Linux and macOS.
 
 ### Example session
@@ -73,6 +80,8 @@ Do you want to continue with Calculations? (y/n) : n
 
 ```
 NumLab-The-Number-Toolkit/
+├── .github/workflows/
+│   └── build.yml             # builds on Linux, Windows and macOS for every push
 ├── apps/
 │   └── main.cpp              # entry point: the main menu loop
 ├── include/Project1/         # headers, one per module plus shared helpers
@@ -88,6 +97,7 @@ NumLab-The-Number-Toolkit/
 │   ├── ClearScreen.cpp       # clears the console on Windows and Linux/macOS
 │   └── ...                   # the other modules (in progress)
 ├── CMakeLists.txt
+├── LICENSE
 └── .clang-format
 ```
 
@@ -112,10 +122,17 @@ g++ -std=c++20 -Iinclude src/*.cpp apps/main.cpp -o numlab
 ./numlab
 ```
 
+A GitHub Actions workflow (`.github/workflows/build.yml`) builds the project on Linux, Windows and macOS for every push.
+
 ## Roadmap
 
 - Radian and gradian angle modes for the trigonometric functions (they currently work in degrees)
 - Type whole expressions such as `2 + 3 * (4 - 1)`, with operator precedence and parentheses
 - Report errors with exceptions and keep the maths code separate from input/output
+- Memory keys (M+, M−, MR, MC), a calculation history and nicer number display
 - Unit tests for every operation
 - Build the remaining menu modules
+
+## License
+
+Released under the [MIT License](LICENSE).
