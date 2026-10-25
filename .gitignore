@@ -1,4 +1,40 @@
+# --- Build output ---
 build/
+build-*/
+out/
+cmake-build-*/
 *.exe
 *.o
+*.obj
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+*.pdb
+*.ilk
+*.exp
+a.out
+
+# --- CMake files created if CMake is ever run inside the source folder ---
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+Testing/
+compile_commands.json
+CMakeUserPresets.json
+
+# --- Editors and IDEs ---
+# (to share a VS Code file such as tasks.json, add the line:  !.vscode/tasks.json  and change .vscode/ to .vscode/*)
 .vscode/
+.vs/
+.idea/
+*.user
+*.suo
+*.swp
+
+# --- Operating system files ---
+.DS_Store
+Thumbs.db
+desktop.ini

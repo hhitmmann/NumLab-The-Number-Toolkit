@@ -1,0 +1,5 @@
+# Let Git normalise line endings: LF inside the repository, your system's own endings in your working copy.
+* text=auto
+
+# Shell scripts must keep LF line endings, even on Windows.
+*.sh text eol=lf
