@@ -11,11 +11,16 @@
 #include <cctype>
 #include <string>
 #include <algorithm>
+#include <numbers>  // for pi here
 
 
 static double LogTypes(char &base,double &n1);
 static double AntiLogTypes(char &base,double &n1);
 static bool readBase(const char *prompt, char &out);
+static double Radians_To_Degree(double &Rad);
+static double Degree_To_Radians(double &Degree);
+
+long double pi = std::numbers::pi_v<long double>;
 
 double add(double &a, double &b){
     return (a + b);
@@ -170,44 +175,56 @@ static double LogTypes(char &base,double &n1){
     }
 }
 
-double SIN(double &a){
-
+double SIN(double a){
+    return std::sin(Degree_To_Radians(a));
 }
-double COS(double &a){
-
+double COS(double a){
+    return std::cos(Degree_To_Radians(a));
 }
-double TAN(double &a){
-
+double TAN(double a){
+    return std::tan(Degree_To_Radians(a));
 }
-double ASIN(double &a){
-
+double ASIN(double a){
+    double r = std::asin(a);
+    return Radians_To_Degree(r);
 }
-double ACOS(double &a){
-
+double ACOS(double a){
+    double r = std::acos(a);
+    return Radians_To_Degree(r);
 }
-double ATAN(double &a){
-
+double ATAN(double a){
+    double r = std::atan(a);
+    return Radians_To_Degree(r);
 }
-double SINH(double &a){
-
+double SINH(double a){
+    return std::sinh(a);
 }
-double COSH(double &a){
-
+double COSH(double a){
+    return std::cosh(a);
 }
-double TANH(double &a){
-
+double TANH(double a){
+    return std::tanh(a);
 }
-double ASINH(double &a){
-
+double ASINH(double a){
+    return std::asinh(a);
 }
-double ACOSH(double &a){
-
+double ACOSH(double a){
+    return std::acosh(a);
 }
-double ATANH(double &a){
-    
+double ATANH(double a){
+    return std::atanh(a);
 }
 
 
+static double Radians_To_Degree(double &Rad){
+    double Degree = Rad*(pi/180);
+    return Degree;
+}
+
+static double Degree_To_Radians(double &Degree){
+    double Rad = Degree*(pi/180);
+    return Rad;
+}
 
 static double AntiLogTypes(char &base,double &n1){
     if(base=='2'){
