@@ -170,6 +170,44 @@ static double LogTypes(char &base,double &n1){
     }
 }
 
+double SIN(double &a){
+
+}
+double COS(double &a){
+
+}
+double TAN(double &a){
+
+}
+double ASIN(double &a){
+
+}
+double ACOS(double &a){
+
+}
+double ATAN(double &a){
+
+}
+double SINH(double &a){
+
+}
+double COSH(double &a){
+
+}
+double TANH(double &a){
+
+}
+double ASINH(double &a){
+
+}
+double ACOSH(double &a){
+
+}
+double ATANH(double &a){
+    
+}
+
+
 
 static double AntiLogTypes(char &base,double &n1){
     if(base=='2'){

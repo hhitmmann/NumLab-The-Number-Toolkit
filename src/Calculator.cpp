@@ -9,6 +9,7 @@
 #include <cctype>
 #include <string>
 #include <algorithm>
+#include <string>
 
 
 double n1{}, n2{}, memory{}; // Global variables to store numbers and memory
@@ -31,7 +32,7 @@ void Calculator(){
         }
         n1 = memory;
 
-        char op;
+        std::string op;
         std::cout<<"Enter Your Operator : ";
         if(!(std::cin>>op)) return;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -44,72 +45,120 @@ void Calculator(){
 void CalculatorUI(){
     std::cout<<"Calculator is selected\n";
     std::cout<<"Following are the operators you can use :\n";
-    std::cout<<"+ -> Addition\n";
-    std::cout<<"- -> Subtraction\n";
-    std::cout<<"* -> Multiplication\n";
-    std::cout<<"/ -> Division\n";
-    std::cout<<"^ -> Power\n";
-    std::cout<<"% -> Modulus\n";
-    std::cout<<"! -> Factorial\n";
-    std::cout<<"s -> Square root\n";
-    std::cout<<"l -> Logarithm\n";
-    std::cout<<"a -> Anti-logarithm\n";
-    std::cout<<"v -> absolute value\n";
+    std::cout<<"+       ->  Addition\n";
+    std::cout<<"-       ->  Subtraction\n";
+    std::cout<<"x       ->  Multiplication\n";
+    std::cout<<"/       ->  Division\n";
+    std::cout<<"^       ->  Power\n";
+    std::cout<<"mod     ->  Modulus\n";
+    std::cout<<"!       ->  Factorial\n";
+    std::cout<<"sqrt    ->  Square root\n";
+    std::cout<<"log     ->  Logarithm\n";
+    std::cout<<"antilog ->  Anti-logarithm\n";
+    std::cout<<"abs     ->  absolute value\n";
 }
 
 // n1 (the first number) is already set by Calculator(), so each branch only asks
 // for what it still needs: the second number, or the log base.
-void CalculatorChoices(char &op){
-    if(op=='+'){
+void CalculatorChoices(std::string &op){
+    if(op=="+"){
         std::cout<<"Addition is selected\n";
         if(!readNumber("Enter the second number : ", n2)) return;
         showAnswer(add(n1,n2));
     }
-    else if(op=='-'){
+    else if(op=="-"){
         std::cout<<"Subtraction is selected\n";
         if(!readNumber("Enter the second number : ", n2)) return;
         showAnswer(subtract(n1,n2));
     }
-    else if(op=='*'){
+    else if(op=="x"){
         std::cout<<"Multiplication is selected\n";
         if(!readNumber("Enter the second number : ", n2)) return;
         showAnswer(multiply(n1,n2));
     }
-    else if(op=='/'){
+    else if(op=="/"){
         std::cout<<"Division is selected\n";
         if(!readNumber("Enter the second number : ", n2)) return;
         showAnswer(divide(n1,n2));
     }
-    else if(op=='^'){
+    else if(op=="^"){
         std::cout<<"Power is selected\n";
         if(!readNumber("Enter the second number : ", n2)) return;
         showAnswer(power(n1, n2));
     }
-    else if(op=='%'){
+    else if(op=="mod"){
         std::cout<<"Modulus is selected\n";
         if(!readNumber("Enter the second number : ", n2)) return;
         showAnswer(modulus(n1,n2));
     }
-    else if(op=='!'){
+    else if(op=="!"){
         std::cout<<"Factorial is selected\n";
         showAnswer(factorial(n1));
     }
-    else if(op=='s'){
+    else if(op=="sqrt"){
         std::cout<<"Square root is selected\n";
         showAnswer(squareRoot(n1));
     }
-    else if(op=='l'){
+    else if(op=="log"){
         std::cout<<"Logarithm is selected\n";
         showAnswer(logarithm(n1));
 
     }
-    else if(op=='a'){
+    else if(op=="antilog"){
         std::cout<<"Anti-Logarithm is selected\n";
         showAnswer(anti_logarithm(n1));
     }
-    else if(op=='v'){
+    else if(op=="abs"){
         std::cout<<"Absolute value is selected\n";
         showAnswer(absolute(n1));
+    }
+    else if(op=="sin"){
+        std::cout<<"sin function is selected\n";
+        showAnswer(SIN(n1));
+    }
+    else if(op=="cos"){
+        std::cout<<"cos function is selected\n";
+        showAnswer(COS(n1));
+    }
+    else if(op=="tan"){
+        std::cout<<"tan function is selected\n";
+        showAnswer(TAN(n1));
+    }
+    else if(op=="arcsin"){
+        std::cout<<"Inverse sin function is selected\n";
+        showAnswer(ASIN(n1));
+    }
+    else if(op=="arccos"){
+        std::cout<<"Inverse cos function is selected\n";
+        showAnswer(ACOS(n1));
+    }
+    else if(op=="arctan"){
+        std::cout<<"Inverse tan function is selected\n";
+        showAnswer(ATAN(n1));
+    }
+    else if(op=="sinh"){
+        std::cout<<"sinh function is selected\n";
+        showAnswer(SINH(n1));
+    }
+    else if(op=="cosh"){
+        std::cout<<"cosh function is selected\n";
+        showAnswer(COSH(n1));
+    }
+    else if(op=="tanh"){
+        std::cout<<"tanh function is selected\n";
+        showAnswer(TANH(n1));
+    }
+    else if(op=="arcsinh"){
+        std::cout<<"Inverse sinh function is selected\n";
+        showAnswer(ATANH(n1));
+    }
+    else if(op=="arccosh"){
+        std::cout<<"Inverse cosh function is selected\n";
+        showAnswer(ACOSH(n1));
+    }
+    else if(op=="arctanh"){
+        std::cout<<"Inverse tanh function is selected\n";
+        showAnswer(ATANH(n1));
     }
     else{
         std::cout<<"Wrong operator entered!\nThis operator does not exist...\n";
