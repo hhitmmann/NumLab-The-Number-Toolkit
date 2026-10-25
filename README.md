@@ -35,8 +35,12 @@ Enter a first number, choose an operator, and enter a second number if the opera
 | `log` | Logarithm | a base: `2`, `t` (base 10) or `e` (natural) |
 | `antilog` | Anti-logarithm | a base: `2`, `t` (base 10) or `e` (natural) |
 | `abs` | Absolute value | nothing |
+| `sin`, `cos`, `tan` | Trigonometric functions (angle in degrees) | nothing |
+| `arcsin`, `arccos`, `arctan` | Inverse trigonometric functions (result in degrees) | nothing |
+| `sinh`, `cosh`, `tanh` | Hyperbolic functions | nothing |
+| `arcsinh`, `arccosh`, `arctanh` | Inverse hyperbolic functions | nothing |
 
-The names `sin`, `cos`, `tan`, `arcsin`, `arccos`, `arctan` and the hyperbolic versions are reserved for the upcoming trigonometry support and are **not implemented yet**.
+Trigonometric functions work in **degrees**. The hyperbolic functions work on plain numbers, not angles. Radian and gradian modes are planned (see [Roadmap](#roadmap)).
 
 **Features**
 
@@ -79,7 +83,7 @@ NumLab-The-Number-Toolkit/
 │   └── ...
 ├── src/
 │   ├── Calculator.cpp        # calculator loop and operator handling
-│   ├── MathOps.cpp           # the math functions (power, factorial, log, ...)
+│   ├── MathOps.cpp           # the math functions (power, factorial, log, trigonometry, ...)
 │   ├── UI_Choices.cpp        # main menu and input helpers
 │   ├── ClearScreen.cpp       # clears the console on Windows and Linux/macOS
 │   └── ...                   # the other modules (in progress)
@@ -89,7 +93,7 @@ NumLab-The-Number-Toolkit/
 
 ## Build and run
 
-**Requirements:** a C++17 compiler (g++, clang or MSVC) and CMake 3.20 or newer.
+**Requirements:** a C++20 compiler (g++ 10 or newer, a recent clang, or MSVC 2019 16.5 or newer) and CMake 3.20 or newer.
 
 ```
 cmake -S . -B build
@@ -98,19 +102,19 @@ cmake --build build
 
 Then run the program:
 
-- Linux / macOS: `./build/calclab_app`
-- Windows: `build\calclab_app.exe` (with the Visual Studio generator it is in `build\Debug\`)
+- Linux / macOS: `./build/numlab`
+- Windows: `build\numlab.exe` (with the Visual Studio generator it is in `build\Debug\`)
 
 **Without CMake** (g++ on Linux, macOS, or Git Bash on Windows):
 
 ```
-g++ -std=c++17 -Iinclude src/*.cpp apps/main.cpp -o numlab
+g++ -std=c++20 -Iinclude src/*.cpp apps/main.cpp -o numlab
 ./numlab
 ```
 
 ## Roadmap
 
-- Trigonometric and hyperbolic functions with degree, radian and gradian modes
+- Radian and gradian angle modes for the trigonometric functions (they currently work in degrees)
 - Type whole expressions such as `2 + 3 * (4 - 1)`, with operator precedence and parentheses
 - Report errors with exceptions and keep the maths code separate from input/output
 - Unit tests for every operation
