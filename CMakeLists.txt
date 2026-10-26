@@ -8,15 +8,15 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Everything except main() lives in a library, so the tests can link against it too.
 add_library(numlab_core
-    src/Base_Converter.cpp
-    src/Calculator.cpp
-    src/ClearScreen.cpp
-    src/Data_Type_Converter.cpp
-    src/MathOps.cpp
-    src/Operator_Lab.cpp
-    src/Overflow_Precision.cpp
-    src/Scientific_Function.cpp
-    src/UI_Choices.cpp
+    src/base_converter/Base_Converter.cpp
+    src/Calculator/Calculator.cpp
+    src/Calculator/MathOps.cpp
+    src/data_type/Data_Type_Converter.cpp
+    src/operator_lab/Operator_Lab.cpp
+    src/Overflow_Precision/Overflow_Precision.cpp
+    src/Scientific_Function/Scientific_Function.cpp
+    src/UI/ClearScreen.cpp
+    src/UI/UI_Choices.cpp
 )
 target_include_directories(numlab_core PUBLIC include)
 

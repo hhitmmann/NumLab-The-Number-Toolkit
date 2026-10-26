@@ -1,4 +1,4 @@
-#include "Project1/MathOps.h"
+#include "numlab/Calculator/MathOps.h"
 #include <iostream>
 #include <cmath>
 #include <limits>

@@ -1,13 +1,14 @@
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
-#include "Project1/UI_Choices.h"
-#include "Project1/Calculator.h"
-#include "Project1/Base_Converter.h"
-#include "Project1/Data_Type_Converter.h"
-#include "Project1/Overflow_Precision.h"
-#include "Project1/Operator_Lab.h"
-#include "Project1/ClearScreen.h"
+#include "numlab/UI/UI_Choices.h"
+#include "numlab/Calculator/Calculator.h"
+#include "numlab/base_converter/Base_Converter.h"
+#include "numlab/data_type/Data_Type_Converter.h"
+#include "numlab/Overflow_Precision/Overflow_Precision.h"
+#include "numlab/operator_lab/Operator_Lab.h"
+#include "numlab/Scientific_Function/Scientific_Function.h"
+#include "numlab/UI/ClearScreen.h"
 static bool readCh(const char *prompt, char &out);
 
 int main(){

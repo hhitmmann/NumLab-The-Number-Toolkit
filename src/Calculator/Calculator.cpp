@@ -1,7 +1,7 @@
-#include "Project1/Calculator.h"
-#include "Project1/UI_Choices.h"
-#include "Project1/ClearScreen.h"
-#include "Project1/MathOps.h"
+#include "numlab/Calculator/Calculator.h"
+#include "numlab/UI/UI_Choices.h"
+#include "numlab/UI/ClearScreen.h"
+#include "numlab/Calculator/MathOps.h"
 #include <iostream>
 #include <cmath>
 #include <limits>
@@ -9,7 +9,6 @@
 #include <cctype>
 #include <string>
 #include <algorithm>
-#include <string>
 
 
 double n1{}, n2{}, memory{}; // Global variables to store numbers and memory
