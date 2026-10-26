@@ -5,27 +5,27 @@
 #include <numbers>  // for pi here
 
 
-static double LogTypes(char &base,double &n1);
-static double AntiLogTypes(char &base,double &n1);
+static double LogTypes(char base, double n1);
+static double AntiLogTypes(char base, double n1);
 static bool readBase(const char *prompt, char &out);
-static double Radians_To_Degree(double &Rad);
-static double Degree_To_Radians(double &Degree);
+static double Radians_To_Degree(double Rad);
+static double Degree_To_Radians(double Degree);
 
 long double pi = std::numbers::pi_v<long double>;
 
-double add(double &a, double &b){
+double add(double a, double b){
     return (a + b);
 }
 
-double subtract(double &a, double &b){
+double subtract(double a, double b){
     return (a - b);
 }
 
-double multiply(double &a, double &b){
+double multiply(double a, double b){
     return (a * b);
 }
 
-double divide(double &a, double &b){
+double divide(double a, double b){
     if(b==0 && a<0){
         return -std::numeric_limits<double>::infinity();
     }
@@ -40,7 +40,7 @@ double divide(double &a, double &b){
     }
 }
 
-double power(double &base, double &exponent){
+double power(double base, double exponent){
         if(std::isnan(std::pow(base, exponent))){
             std::cout<<"Answer is not a real number\n";
             return std::nan("");
@@ -55,7 +55,7 @@ double power(double &base, double &exponent){
     
 }
 
-double modulus(double &a, double &b){
+double modulus(double a, double b){
     if(b == 0){
         std::cout<<"Modulus by zero is undefined\n";
         return std::numeric_limits<double>::infinity();
@@ -69,7 +69,7 @@ double modulus(double &a, double &b){
     }
 }
 
-double factorial(double &a){
+double factorial(double a){
     if(a < 0 || a != std::floor(a)){
         std::cout<<"Factorial is only defined for whole numbers (0 or greater)\n";
         return std::numeric_limits<double>::quiet_NaN();
@@ -83,7 +83,7 @@ double factorial(double &a){
     }
 }
 
-double squareRoot(double &a){
+double squareRoot(double a){
     if(a>=0){
         return std::sqrt(a);
     }
@@ -93,11 +93,11 @@ double squareRoot(double &a){
     }
 }
 
-double absolute(double &a){
+double absolute(double a){
     return std::abs(a);
 }
 
-double logarithm(double &a){
+double logarithm(double a){
     char base;
     std::cout << "  2  ->  Log base 2\n";
     std::cout << "  t  ->  Log base 10\n";
@@ -109,7 +109,7 @@ double logarithm(double &a){
     return LogTypes(base, a);
 }
 
-double anti_logarithm(double &a){
+double anti_logarithm(double a){
     char base;
     std::cout << "  2  ->  Anti-Log base 2\n";
     std::cout << "  t  ->  Anti-Log base 10\n";
@@ -119,51 +119,6 @@ double anti_logarithm(double &a){
         return std::numeric_limits<double>::quiet_NaN();
     }
     return AntiLogTypes(base,a); 
-}
-
-
-static double LogTypes(char &base,double &n1){
-    if(base=='2'){
-        std::cout<<"Log base 2 is selected\n";
-        if(n1<0){
-            return std::numeric_limits<double>::quiet_NaN();
-        }
-        else if(n1==0){
-            return -std::numeric_limits<double>::infinity();
-        }
-        else{
-            return std::log2(n1);
-        }
-    }
-    else if(base=='t'){
-        std::cout<<"Log base 10 is selected\n";
-        if(n1 < 0){
-            return std::numeric_limits<double>::quiet_NaN();
-        }
-        else if(n1 == 0){
-            return -std::numeric_limits<double>::infinity();
-        }
-        else{
-            return std::log10(n1);
-        }
-    }
-    else if(base=='e'){
-        std::cout<<"Log base e(Natural Logarithm) is selected\n";
-
-        if(n1<0){
-            return std::numeric_limits<double>::quiet_NaN();
-        }
-        else if(n1==0){
-            return -std::numeric_limits<double>::infinity();
-        }
-        else{
-            return std::log(n1);
-        }
-    }
-    else{
-        std::cout<<"Wrong Log Base entered!\nThis Log Base does not exist...\n";
-        return std::numeric_limits<double>::quiet_NaN();
-    }
 }
 
 double SIN(double a){
@@ -207,17 +162,63 @@ double ATANH(double a){
 }
 
 
-static double Radians_To_Degree(double &Rad){
+static double Radians_To_Degree(double Rad){
     double Degree = Rad*(180/pi);
     return Degree;
 }
 
-static double Degree_To_Radians(double &Degree){
+static double Degree_To_Radians(double Degree){
     double Rad = Degree*(pi/180);
     return Rad;
 }
 
-static double AntiLogTypes(char &base,double &n1){
+static double LogTypes(char base, double n1){
+    if(base=='2'){
+        std::cout<<"Log base 2 is selected\n";
+        if(n1<0){
+            return std::numeric_limits<double>::quiet_NaN();
+        }
+        else if(n1==0){
+            return -std::numeric_limits<double>::infinity();
+        }
+        else{
+            return std::log2(n1);
+        }
+    }
+    else if(base=='t'){
+        std::cout<<"Log base 10 is selected\n";
+        if(n1 < 0){
+            return std::numeric_limits<double>::quiet_NaN();
+        }
+        else if(n1 == 0){
+            return -std::numeric_limits<double>::infinity();
+        }
+        else{
+            return std::log10(n1);
+        }
+    }
+    else if(base=='e'){
+        std::cout<<"Log base e(Natural Logarithm) is selected\n";
+
+        if(n1<0){
+            return std::numeric_limits<double>::quiet_NaN();
+        }
+        else if(n1==0){
+            return -std::numeric_limits<double>::infinity();
+        }
+        else{
+            return std::log(n1);
+        }
+    }
+    else{
+        std::cout<<"Wrong Log Base entered!\nThis Log Base does not exist...\n";
+        return std::numeric_limits<double>::quiet_NaN();
+    }
+}
+
+
+
+static double AntiLogTypes(char base, double n1){
     if(base=='2'){
         std::cout<<"Anti-Log base 2 is selected\n";
         double result = std::pow(2.0, n1);
