@@ -45,29 +45,29 @@ void Calculator(){
 void CalculatorUI(){
     std::cout<<"Calculator is selected\n";
     std::cout<<"Following are the operators you can use :\n";
-    std::cout<<"+       ->  Addition\n";
-    std::cout<<"-       ->  Subtraction\n";
-    std::cout<<"x       ->  Multiplication\n";
-    std::cout<<"/       ->  Division\n";
-    std::cout<<"^       ->  Power\n";
-    std::cout<<"mod     ->  Modulus\n";
-    std::cout<<"!       ->  Factorial\n";
-    std::cout<<"sqrt    ->  Square root\n";
-    std::cout<<"log     ->  Logarithm\n";
-    std::cout<<"antilog ->  Anti-logarithm\n";
-    std::cout<<"abs     ->  absolute value\n";
-    std::cout<<"sin     ->  sin\n";
-    std::cout<<"abs     ->  cos\n";
-    std::cout<<"abs     ->  tan\n";
-    std::cout<<"abs     ->  arcsin\n";
-    std::cout<<"abs     ->  arccos\n";
-    std::cout<<"abs     ->  arctan\n";
-    std::cout<<"abs     ->  sinh\n";
-    std::cout<<"abs     ->  cosh\n";
-    std::cout<<"abs     ->  tanh\n";
-    std::cout<<"abs     ->  arcsinh\n";
-    std::cout<<"abs     ->  arccosh\n";
-    std::cout<<"abs     ->  arctanh\n";
+    std::cout<<"+           ->  Addition\n";
+    std::cout<<"-           ->  Subtraction\n";
+    std::cout<<"x           ->  Multiplication\n";
+    std::cout<<"/           ->  Division\n";
+    std::cout<<"^           ->  Power\n";
+    std::cout<<"mod         ->  Modulus\n";
+    std::cout<<"!           ->  Factorial\n";
+    std::cout<<"sqrt        ->  Square root\n";
+    std::cout<<"log         ->  Logarithm\n";
+    std::cout<<"antilog     ->  Anti-logarithm\n";
+    std::cout<<"abs         ->  absolute value\n";
+    std::cout<<"sin         ->  sin\n";
+    std::cout<<"cos         ->  cos\n";
+    std::cout<<"tan         ->  tan\n";
+    std::cout<<"arcsin      ->  arcsin\n";
+    std::cout<<"arccos      ->  arccos\n";
+    std::cout<<"arctan      ->  arctan\n";
+    std::cout<<"sinh        ->  sinh\n";
+    std::cout<<"cosh        ->  cosh\n";
+    std::cout<<"tanh        ->  tanh\n";
+    std::cout<<"arcsinh     ->  arcsinh\n";
+    std::cout<<"arccosh     ->  arccosh\n";
+    std::cout<<"arctanh     ->  arctanh\n";
 }
 
 // n1 (the first number) is already set by Calculator(), so each branch only asks

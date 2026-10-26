@@ -1,16 +1,7 @@
-#include "Project1/UI_Choices.h"
 #include "Project1/MathOps.h"
-#include "Project1/Calculator.h"
-#include "Project1/Base_Converter.h"
-#include "Project1/ClearScreen.h"
-#include <cstdlib>
 #include <iostream>
 #include <cmath>
 #include <limits>
-#include <iomanip>
-#include <cctype>
-#include <string>
-#include <algorithm>
 #include <numbers>  // for pi here
 
 
