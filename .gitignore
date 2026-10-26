@@ -16,6 +16,9 @@ cmake-build-*/
 *.exp
 a.out
 
+# Binary made by the README's one-line g++ command
+/numlab
+
 # --- CMake files created if CMake is ever run inside the source folder ---
 CMakeCache.txt
 CMakeFiles/
@@ -33,6 +36,7 @@ CMakeUserPresets.json
 *.user
 *.suo
 *.swp
+.cache/
 
 # --- Operating system files ---
 .DS_Store

@@ -81,25 +81,31 @@ Do you want to continue with Calculations? (y/n) : n
 ```
 NumLab-The-Number-Toolkit/
 ├── .github/workflows/
-│   └── build.yml             # builds on Linux, Windows and macOS for every push
+│   └── build.yml                 # builds on Linux, Windows and macOS for every push
 ├── apps/
-│   └── main.cpp              # entry point: the main menu loop
-├── include/Project1/         # headers, one per module plus shared helpers
-│   ├── Calculator.h
-│   ├── MathOps.h
-│   ├── UI_Choices.h
-│   ├── ClearScreen.h
-│   └── ...
-├── src/
-│   ├── Calculator.cpp        # calculator loop and operator handling
-│   ├── MathOps.cpp           # the math functions (power, factorial, log, trigonometry, ...)
-│   ├── UI_Choices.cpp        # main menu and input helpers
-│   ├── ClearScreen.cpp       # clears the console on Windows and Linux/macOS
-│   └── ...                   # the other modules (in progress)
+│   └── main.cpp                  # entry point: the main menu loop
+├── include/numlab/               # headers: one folder per module
+│   ├── Calculator/               # Calculator.h, MathOps.h
+│   ├── UI/                       # UI_Choices.h, ClearScreen.h
+│   ├── base_converter/
+│   ├── data_type/
+│   ├── operator_lab/
+│   ├── Overflow_Precision/
+│   └── Scientific_Function/
+├── src/                          # implementations: the same folders as include/numlab/
+│   ├── Calculator/
+│   │   ├── Calculator.cpp        # calculator loop and operator handling
+│   │   └── MathOps.cpp           # the math functions (power, factorial, log, trigonometry, ...)
+│   ├── UI/
+│   │   ├── UI_Choices.cpp        # main menu and input helpers
+│   │   └── ClearScreen.cpp       # clears the console on Windows and Linux/macOS
+│   └── ...                       # the other modules (in progress)
 ├── CMakeLists.txt
 ├── LICENSE
 └── .clang-format
 ```
+
+Each module has its own folder under `include/numlab/` and `src/`, and headers are included with their folder, for example `#include "numlab/Calculator/Calculator.h"`. When you add a source file, list it in `CMakeLists.txt`.
 
 ## Build and run
 
@@ -118,7 +124,7 @@ Then run the program:
 **Without CMake** (g++ on Linux, macOS, or Git Bash on Windows):
 
 ```
-g++ -std=c++20 -Iinclude src/*.cpp apps/main.cpp -o numlab
+g++ -std=c++20 -Iinclude src/*/*.cpp apps/main.cpp -o numlab
 ./numlab
 ```
 
