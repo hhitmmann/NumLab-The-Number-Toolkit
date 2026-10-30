@@ -35,10 +35,3 @@ static bool readCh(const char *prompt, char &out){
         std::cout << "Invalid Choice input! Try again.\n";
     }
 }
-
-
-
-
-
-
-
