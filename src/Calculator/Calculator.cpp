@@ -11,7 +11,9 @@
 #include <algorithm>
 
 
-double n1{}, n2{}, memory{}; // Global variables to store numbers and memory
+double n1{}, n2{},n3{}, memory{}; // Global variables to store numbers and memory
+bool firstrun = true;
+std::string op1,op2;
 
 void Calculator(){
     std::cout << std::setprecision(15);
@@ -31,12 +33,11 @@ void Calculator(){
         }
         n1 = memory;
 
-        std::string op;
+        
         std::cout<<"Enter Your Operator : ";
-        if(!(std::cin>>op)) return;
+        if(!(std::cin>>op1)) return;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-        CalculatorChoices(op);   // asks only for what is still missing, prints "Answer" on success
+        CalculatorChoices(op1);   // asks only for what is still missing, prints "Answer" on success
     }
     while(askYesNo("Do you want to continue with Calculations? (y/n) : "));
 }
@@ -71,105 +72,456 @@ void CalculatorUI(){
 
 // n1 (the first number) is already set by Calculator(), so each branch only asks
 // for what it still needs: the second number, or the log base.
+
+/*if(firstrun){
+            firstrun = false;
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+        }
+*/
+
 void CalculatorChoices(std::string &op){
     if(op=="+"){
-        std::cout<<"Addition is selected\n";
-        if(!readNumber("Enter the second number : ", n2)) return;
-        showAnswer(add(n1,n2));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"Addition is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            if(op1=="+" && op2=="+"){
+            }
+            else if(op1=="+" && op2=="-"){ 
+            }
+            else{
+                memory = add(n1,memory);
+            }
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            if(op1=="-"){
+                memory = subtract(n1,n2);
+            }
+            else{
+                memory = add(n1,n2);
+            }
+            showAnswer(memory); 
+        }
     }
     else if(op=="-"){
-        std::cout<<"Subtraction is selected\n";
-        if(!readNumber("Enter the second number : ", n2)) return;
-        showAnswer(subtract(n1,n2));
+       if(firstrun){
+            firstrun = false;
+            std::cout<<"Subtraction is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            if(op1=="-" && op2=="-"){
+            }
+            else if(op1=="-" && op2=="+"){ 
+            }
+            else{
+                memory = subtract(n1,memory);
+            }
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            if(op1=="-" && op2 == "-"){
+                memory = add(n1,n2);
+            }
+            else{
+                memory = subtract(n1,n2);
+            }
+            showAnswer(memory);
+        }
     }
     else if(op=="x"){
-        std::cout<<"Multiplication is selected\n";
-        if(!readNumber("Enter the second number : ", n2)) return;
-        showAnswer(multiply(n1,n2));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"Multiplication is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = multiply(n1,memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            if(!readNumber("Enter the 3rd number : ", n3)) return;
+            memory = multiply(n2,n3);
+            showAnswer(memory);
+        }
     }
     else if(op=="/"){
-        std::cout<<"Division is selected\n";
-        if(!readNumber("Enter the second number : ", n2)) return;
-        showAnswer(divide(n1,n2));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"Division is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = divide(n1,memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            if(!readNumber("Enter the 3rd number : ", n3)) return;
+            memory = divide(n2,n3);
+            showAnswer(memory);
+        }
     }
     else if(op=="^"){
-        std::cout<<"Power is selected\n";
-        if(!readNumber("Enter the second number : ", n2)) return;
-        showAnswer(power(n1, n2));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"power is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = power(n1,memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            if(!readNumber("Enter the 3rd number : ", n3)) return;
+            memory = power(n2,n3);
+            showAnswer(memory);
+        }
     }
     else if(op=="mod"){
-        std::cout<<"Modulus is selected\n";
-        if(!readNumber("Enter the second number : ", n2)) return;
-        showAnswer(modulus(n1,n2));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"Modulus is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = modulus(n1,memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            if(!readNumber("Enter the 3rd number : ", n3)) return;
+            memory = modulus(n2,n3);
+            showAnswer(memory);
+        }
     }
     else if(op=="!"){
-        std::cout<<"Factorial is selected\n";
-        showAnswer(factorial(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"factorial is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = factorial(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = factorial(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="sqrt"){
-        std::cout<<"Square root is selected\n";
-        showAnswer(squareRoot(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"Square root is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = squareRoot(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = squareRoot(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="log"){
-        std::cout<<"Logarithm is selected\n";
-        showAnswer(logarithm(n1));
-
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"Logarithm is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = logarithm(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = logarithm(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="antilog"){
-        std::cout<<"Anti-Logarithm is selected\n";
-        showAnswer(anti_logarithm(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"Anti-Logarithm is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = anti_logarithm(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = anti_logarithm(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="abs"){
-        std::cout<<"Absolute value is selected\n";
-        showAnswer(absolute(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"Absolute value is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = absolute(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = absolute(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="sin"){
-        std::cout<<"sin function is selected\n";
-        showAnswer(SIN(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"sin function is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = SIN(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = SIN(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="cos"){
-        std::cout<<"cos function is selected\n";
-        showAnswer(COS(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"cos function is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = COS(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = COS(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="tan"){
-        std::cout<<"tan function is selected\n";
-        showAnswer(TAN(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"tan function is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = TAN(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = TAN(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="arcsin"){
-        std::cout<<"Inverse sin function is selected\n";
-        showAnswer(ASIN(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"Inverse sin function is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = ASIN(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = ASIN(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="arccos"){
-        std::cout<<"Inverse cos function is selected\n";
-        showAnswer(ACOS(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"Inverse cos function is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = ACOS(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = ACOS(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="arctan"){
-        std::cout<<"Inverse tan function is selected\n";
-        showAnswer(ATAN(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"Inverse tan function is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = ATAN(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = ATAN(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="sinh"){
-        std::cout<<"sinh function is selected\n";
-        showAnswer(SINH(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"sinh function is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = SINH(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = SINH(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="cosh"){
-        std::cout<<"cosh function is selected\n";
-        showAnswer(COSH(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"cosh function is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = COSH(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = COSH(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="tanh"){
-        std::cout<<"tanh function is selected\n";
-        showAnswer(TANH(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"tanh function is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = TANH(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = TANH(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="arcsinh"){
-        std::cout<<"Inverse sinh function is selected\n";
-        showAnswer(ATANH(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"Inverse sinh function is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = ASINH(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = ASINH(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="arccosh"){
-        std::cout<<"Inverse cosh function is selected\n";
-        showAnswer(ACOSH(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"Inverse cosh function is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = ACOSH(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = ACOSH(n2);
+            showAnswer(memory);
+        }
     }
     else if(op=="arctanh"){
-        std::cout<<"Inverse tanh function is selected\n";
-        showAnswer(ATANH(n1));
+        if(firstrun){
+            firstrun = false;
+            std::cout<<"Inverse tanh function is selected\n";
+            std::cout<<"Enter Your 2nd Operator : ";
+            if(!(std::cin>>op2)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op2);
+            memory = ATANH(memory);
+            showAnswer(memory);
+        }
+        else{
+            firstrun = true;
+            if(!readNumber("Enter the second number : ", n2)) return;
+            memory = ATANH(n2);
+            showAnswer(memory);
+        }
     }
     else{
         std::cout<<"Wrong operator entered!\nThis operator does not exist...\n";
