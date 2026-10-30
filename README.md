@@ -8,7 +8,7 @@
 
 A console toolkit written in C++ for working with numbers. It starts with a calculator and is growing into a set of small tools: scientific functions, base and data-type converters, and labs for exploring overflow, precision and operators.
 
-> **Status:** work in progress. The calculator works; the other modules are planned (see [Modules](#modules)).
+> **Status:** work in progress. The calculator works and is being extended to chain two operators (see [Calculator](#calculator)); the other modules are planned (see [Modules](#modules)).
 
 ## Modules
 
@@ -26,32 +26,57 @@ The program opens on a main menu:
 
 ## Calculator
 
-Enter a first number, choose an operator, and enter a second number if the operator needs one. The answer is shown, and you can carry on with it as the next first number.
+Enter a first number, then **two operators in a row**, then the number or numbers the second operator needs. The second operator is worked out first on the numbers you type next, and its result is combined with the first number using the first operator. The answer is shown, and you can carry on with it as the next first number.
 
-| Operator | Operation | Asks for |
-|----------|-----------|----------|
-| `+` | Addition | second number |
-| `-` | Subtraction | second number |
-| `x` | Multiplication | second number |
-| `/` | Division | second number |
-| `^` | Power | second number |
-| `mod` | Modulus (the result is never negative) | second number |
-| `!` | Factorial (whole numbers, 0 to 170) | nothing |
-| `sqrt` | Square root | nothing |
-| `log` | Logarithm | a base: `2`, `t` (base 10) or `e` (natural) |
-| `antilog` | Anti-logarithm | a base: `2`, `t` (base 10) or `e` (natural) |
-| `abs` | Absolute value | nothing |
-| `sin`, `cos`, `tan` | Trigonometric functions (angle in degrees) | nothing |
-| `arcsin`, `arccos`, `arctan` | Inverse trigonometric functions (result in degrees) | nothing |
-| `sinh`, `cosh`, `tanh` | Hyperbolic functions | nothing |
-| `arcsinh`, `arccosh`, `arctanh` | Inverse hyperbolic functions | nothing |
+| Operator | Operation | Numbers it asks for (as the second operator) |
+|----------|-----------|----------------------------------------------|
+| `+` | Addition | one number |
+| `-` | Subtraction | one number |
+| `x` | Multiplication | two numbers |
+| `/` | Division | two numbers |
+| `^` | Power | two numbers |
+| `mod` | Modulus (the result is never negative) | two numbers |
+| `!` | Factorial (whole numbers, 0 to 170) | one number |
+| `sqrt` | Square root | one number |
+| `log` | Logarithm | one number, then a base: `2`, `t` (base 10) or `e` (natural) |
+| `antilog` | Anti-logarithm | one number, then a base: `2`, `t` (base 10) or `e` (natural) |
+| `abs` | Absolute value | one number |
+| `sin`, `cos`, `tan` | Trigonometric functions (angle in degrees) | one number |
+| `arcsin`, `arccos`, `arctan` | Inverse trigonometric functions (result in degrees) | one number |
+| `sinh`, `cosh`, `tanh` | Hyperbolic functions | one number |
+| `arcsinh`, `arccosh`, `arctanh` | Inverse hyperbolic functions | one number |
+
+**How the two operators combine**
+
+Here *a* is the first number, and *b* and *c* are the numbers you type next.
+
+| First operator | Second operator | You type | Result |
+|----------------|-----------------|----------|--------|
+| `+` or `-` | `+` or `-` | *b* | The two signs combine: `+ +` gives a + b, `+ -` gives a − b, `- -` gives a − (−b) and `- +` gives a − b |
+| `+` `-` `x` `/` `^` `mod` | a function, such as `abs`, `sqrt` or `sin` | *b* | a (first operator) f(*b*) |
+| `+` `-` `x` `/` `^` `mod` | `x` `/` `^` `mod` | *b* and *c* | a (first operator) (*b* (second operator) *c*) |
+| a function | a function | *b* | first(second(*b*)). The first number is not used. |
+
+Other pairings run, but are not documented yet because the design is still changing. To apply a function on its own to a non-negative number, give `abs` as the second operator, for example `sqrt`, then `abs`, then `16`.
+
+| You type | It calculates | Result |
+|----------|---------------|--------|
+| `5` `+` `+` `3` | 5 + 3 | 8 |
+| `5` `+` `-` `3` | 5 + (−3) | 2 |
+| `5` `-` `-` `3` | 5 − (−3) | 8 |
+| `5` `+` `sqrt` `9` | 5 + √9 | 8 |
+| `5` `x` `abs` `3` | 5 × abs(3) | 15 |
+| `5` `+` `x` `2` `3` | 5 + (2 × 3) | 11 |
+| `5` `x` `x` `2` `3` | 5 × (2 × 3) | 30 |
+| `sinh` `sin` `20` | sinh(sin 20°) | 0.348727379347889 |
+| `sqrt` `abs` `16` | sqrt(abs 16) | 4 |
 
 Trigonometric functions work in **degrees**. The hyperbolic functions work on plain numbers, not angles. Radian and gradian modes are planned (see [Roadmap](#roadmap)). A value outside a function's domain (for example `arcsin` of 2, or `arccosh` of 0.5) reports a math error.
 
 **Features**
 
-- **Result chaining:** the previous answer is shown as `First number (carried over)` and becomes the next first number.
-- **Input checking:** an invalid number or menu choice is re-requested instead of crashing the program.
+- **Result chaining:** the previous answer is shown as `First number (carried over)` and is used as the first number by `+`, `-`, `x`, `/`, `^` and `mod`.
+- **Input checking:** an invalid number, menu choice or log base is re-requested instead of crashing the program. The continue prompt accepts `y`, `yes`, `n` or `no` in any letter case.
 - **Clear messages:** problems such as the square root of a negative number, a factorial of a non-whole number or modulus by zero print an explanation.
 - **Safe errors:** when an operation has no valid answer, a math error is shown and the previous value is kept, so one mistake does not spoil the rest of a calculation.
 - **Cross-platform:** the console is cleared between rounds on Windows, Linux and macOS.
@@ -64,17 +89,24 @@ Calculator is selected
 Enter the first number : 5
 Enter Your Operator : +
 Addition is selected
-Enter the second number : 3
+Enter Your 2nd Operator : sqrt
+Enter the second number : 9
+Answer : 3
 Answer : 8
 Do you want to continue with Calculations? (y/n) : y
 
 First number (carried over) : 8
 Enter Your Operator : x
 Multiplication is selected
+Enter Your 2nd Operator : x
 Enter the second number : 2
-Answer : 16
+Enter the 3rd number : 3
+Answer : 6
+Answer : 48
 Do you want to continue with Calculations? (y/n) : n
 ```
+
+The first `Answer` is the second operator's own result (√9 = 3, then 2 × 3 = 6). The second `Answer` is the final result after the first operator is applied (5 + 3 = 8, then 8 × 6 = 48).
 
 ## Project structure
 
@@ -102,10 +134,15 @@ NumLab-The-Number-Toolkit/
 │   └── ...                       # the other modules (in progress)
 ├── CMakeLists.txt
 ├── LICENSE
-└── .clang-format
+├── .clang-format
+├── .editorconfig
+├── .gitattributes
+└── .gitignore
 ```
 
 Each module has its own folder under `include/numlab/` and `src/`, and headers are included with their folder, for example `#include "numlab/Calculator/Calculator.h"`. When you add a source file, list it in `CMakeLists.txt`.
+
+`CMakeLists.txt` builds everything except `main()` into a static library, `numlab_core`, and links the `numlab` executable against it. That keeps the code reusable for unit tests: a `tests/CMakeLists.txt` file is picked up automatically once it exists.
 
 ## Build and run
 
@@ -128,7 +165,7 @@ g++ -std=c++20 -Iinclude src/*/*.cpp apps/main.cpp -o numlab
 ./numlab
 ```
 
-A GitHub Actions workflow (`.github/workflows/build.yml`) builds the project on Linux, Windows and macOS for every push.
+A GitHub Actions workflow (`.github/workflows/build.yml`) runs on every push to `main` and on every pull request. It builds the project on Linux, Windows and macOS, runs the unit tests once a `tests/` folder exists, and finishes with a smoke test that feeds `5 + 3` to the program and checks that it prints `Answer : 8`.
 
 ## Roadmap
 
