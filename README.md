@@ -26,25 +26,37 @@ The program opens on a main menu:
 
 ## Calculator
 
-Enter a first number, choose an operator, and enter a second number if the operator needs one. The answer is shown, and you can carry on with it as the next first number.
+Enter a first number, then **two operators in a row**, then the number or numbers the second operator needs. The second operator is worked out first on the numbers you type next, and its result is combined with the first number using the first operator. The answer is shown, and you can carry on with it as the next first number.
 
-| Operator | Operation | Asks for |
-|----------|-----------|----------|
-| `+` | Addition | second number |
-| `-` | Subtraction | second number |
-| `x` | Multiplication | second number |
-| `/` | Division | second number |
-| `^` | Power | second number |
-| `mod` | Modulus (the result is never negative) | second number |
-| `!` | Factorial (whole numbers, 0 to 170) | nothing |
-| `sqrt` | Square root | nothing |
-| `log` | Logarithm | a base: `2`, `t` (base 10) or `e` (natural) |
-| `antilog` | Anti-logarithm | a base: `2`, `t` (base 10) or `e` (natural) |
-| `abs` | Absolute value | nothing |
-| `sin`, `cos`, `tan` | Trigonometric functions (angle in degrees) | nothing |
-| `arcsin`, `arccos`, `arctan` | Inverse trigonometric functions (result in degrees) | nothing |
-| `sinh`, `cosh`, `tanh` | Hyperbolic functions | nothing |
-| `arcsinh`, `arccosh`, `arctanh` | Inverse hyperbolic functions | nothing |
+| Operator | Operation | Numbers it asks for (as the second operator) |
+|----------|-----------|----------------------------------------------|
+| `+` | Addition | one number |
+| `-` | Subtraction | one number |
+| `x` | Multiplication | two numbers |
+| `/` | Division | two numbers |
+| `^` | Power | two numbers |
+| `mod` | Modulus (the result is never negative) | two numbers |
+| `!` | Factorial (whole numbers, 0 to 170) | one number |
+| `sqrt` | Square root | one number |
+| `log` | Logarithm | one number, then a base: `2`, `t` (base 10) or `e` (natural) |
+| `antilog` | Anti-logarithm | one number, then a base: `2`, `t` (base 10) or `e` (natural) |
+| `abs` | Absolute value | one number |
+| `sin`, `cos`, `tan` | Trigonometric functions (angle in degrees) | one number |
+| `arcsin`, `arccos`, `arctan` | Inverse trigonometric functions (result in degrees) | one number |
+| `sinh`, `cosh`, `tanh` | Hyperbolic functions | one number |
+| `arcsinh`, `arccosh`, `arctanh` | Inverse hyperbolic functions | one number |
+
+**How the two operators combine**
+
+| You type | Means | Answer |
+|----------|-------|--------|
+| `5`, `+`, `+`, `3` | 5 + 3 | 8 |
+| `5`, `+`, `-`, `3` | 5 + (−3) | 2 |
+| `5`, `-`, `-`, `3` | 5 − (−3) | 8 |
+| `5`, `+`, `sqrt`, `9` | 5 + √9 | 8 |
+| `5`, `x`, `x`, `2`, `3` | 5 × (2 × 3) | 30 |
+
+The first number is used only when the first operator joins it to something, as in the table above. If the first operator is a one-number function such as `sqrt`, it is applied to the result of the second operator and the first number is not used: `9`, `sqrt`, `abs`, `-16` gives 4.
 
 Trigonometric functions work in **degrees**. The hyperbolic functions work on plain numbers, not angles. Radian and gradian modes are planned (see [Roadmap](#roadmap)). A value outside a function's domain (for example `arcsin` of 2, or `arccosh` of 0.5) reports a math error.
 
@@ -64,17 +76,24 @@ Calculator is selected
 Enter the first number : 5
 Enter Your Operator : +
 Addition is selected
-Enter the second number : 3
+Enter Your 2nd Operator : sqrt
+Enter the second number : 9
+Answer : 3
 Answer : 8
 Do you want to continue with Calculations? (y/n) : y
 
 First number (carried over) : 8
 Enter Your Operator : x
 Multiplication is selected
+Enter Your 2nd Operator : x
 Enter the second number : 2
-Answer : 16
+Enter the 3rd number : 3
+Answer : 6
+Answer : 48
 Do you want to continue with Calculations? (y/n) : n
 ```
+
+The first `Answer` is the second operator's own result (√9 = 3, then 2 × 3 = 6). The second `Answer` is the final result after the first operator is applied (5 + 3 = 8, then 8 × 6 = 48).
 
 ## Project structure
 
