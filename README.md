@@ -8,7 +8,7 @@
 
 A console toolkit written in C++ for working with numbers. It starts with a calculator and is growing into a set of small tools: scientific functions, base and data-type converters, and labs for exploring overflow, precision and operators.
 
-> **Status:** work in progress. The calculator works; the other modules are planned (see [Modules](#modules)).
+> **Status:** work in progress. The calculator works and is being extended to chain two operators (see [Calculator](#calculator)); the other modules are planned (see [Modules](#modules)).
 
 ## Modules
 
@@ -48,21 +48,34 @@ Enter a first number, then **two operators in a row**, then the number or number
 
 **How the two operators combine**
 
-| You type | Means | Answer |
-|----------|-------|--------|
-| `5`, `+`, `+`, `3` | 5 + 3 | 8 |
-| `5`, `+`, `-`, `3` | 5 + (−3) | 2 |
-| `5`, `-`, `-`, `3` | 5 − (−3) | 8 |
-| `5`, `+`, `sqrt`, `9` | 5 + √9 | 8 |
-| `5`, `x`, `x`, `2`, `3` | 5 × (2 × 3) | 30 |
+Here *a* is the first number, and *b* and *c* are the numbers you type next.
 
-The first number is used only when the first operator joins it to something, as in the table above. If the first operator is a one-number function such as `sqrt`, it is applied to the result of the second operator and the first number is not used: `9`, `sqrt`, `abs`, `-16` gives 4.
+| First operator | Second operator | You type | Result |
+|----------------|-----------------|----------|--------|
+| `+` or `-` | `+` or `-` | *b* | The two signs combine: `+ +` gives a + b, `+ -` gives a − b, `- -` gives a − (−b) and `- +` gives a − b |
+| `+` `-` `x` `/` `^` `mod` | a function, such as `abs`, `sqrt` or `sin` | *b* | a (first operator) f(*b*) |
+| `+` `-` `x` `/` `^` `mod` | `x` `/` `^` `mod` | *b* and *c* | a (first operator) (*b* (second operator) *c*) |
+| a function | a function | *b* | first(second(*b*)). The first number is not used. |
+
+Other pairings run, but are not documented yet because the design is still changing. To apply a function on its own to a non-negative number, give `abs` as the second operator, for example `sqrt`, then `abs`, then `16`.
+
+| You type | It calculates | Result |
+|----------|---------------|--------|
+| `5` `+` `+` `3` | 5 + 3 | 8 |
+| `5` `+` `-` `3` | 5 + (−3) | 2 |
+| `5` `-` `-` `3` | 5 − (−3) | 8 |
+| `5` `+` `sqrt` `9` | 5 + √9 | 8 |
+| `5` `x` `abs` `3` | 5 × abs(3) | 15 |
+| `5` `+` `x` `2` `3` | 5 + (2 × 3) | 11 |
+| `5` `x` `x` `2` `3` | 5 × (2 × 3) | 30 |
+| `sinh` `sin` `20` | sinh(sin 20°) | 0.348727379347889 |
+| `sqrt` `abs` `16` | sqrt(abs 16) | 4 |
 
 Trigonometric functions work in **degrees**. The hyperbolic functions work on plain numbers, not angles. Radian and gradian modes are planned (see [Roadmap](#roadmap)). A value outside a function's domain (for example `arcsin` of 2, or `arccosh` of 0.5) reports a math error.
 
 **Features**
 
-- **Result chaining:** the previous answer is shown as `First number (carried over)` and becomes the next first number.
+- **Result chaining:** the previous answer is shown as `First number (carried over)` and is used as the first number by `+`, `-`, `x`, `/`, `^` and `mod`.
 - **Input checking:** an invalid number, menu choice or log base is re-requested instead of crashing the program. The continue prompt accepts `y`, `yes`, `n` or `no` in any letter case.
 - **Clear messages:** problems such as the square root of a negative number, a factorial of a non-whole number or modulus by zero print an explanation.
 - **Safe errors:** when an operation has no valid answer, a math error is shown and the previous value is kept, so one mistake does not spoil the rest of a calculation.
