@@ -51,7 +51,7 @@ Trigonometric functions work in **degrees**. The hyperbolic functions work on pl
 **Features**
 
 - **Result chaining:** the previous answer is shown as `First number (carried over)` and becomes the next first number.
-- **Input checking:** an invalid number or menu choice is re-requested instead of crashing the program.
+- **Input checking:** an invalid number, menu choice or log base is re-requested instead of crashing the program. The continue prompt accepts `y`, `yes`, `n` or `no` in any letter case.
 - **Clear messages:** problems such as the square root of a negative number, a factorial of a non-whole number or modulus by zero print an explanation.
 - **Safe errors:** when an operation has no valid answer, a math error is shown and the previous value is kept, so one mistake does not spoil the rest of a calculation.
 - **Cross-platform:** the console is cleared between rounds on Windows, Linux and macOS.
@@ -102,10 +102,15 @@ NumLab-The-Number-Toolkit/
 │   └── ...                       # the other modules (in progress)
 ├── CMakeLists.txt
 ├── LICENSE
-└── .clang-format
+├── .clang-format
+├── .editorconfig
+├── .gitattributes
+└── .gitignore
 ```
 
 Each module has its own folder under `include/numlab/` and `src/`, and headers are included with their folder, for example `#include "numlab/Calculator/Calculator.h"`. When you add a source file, list it in `CMakeLists.txt`.
+
+`CMakeLists.txt` builds everything except `main()` into a static library, `numlab_core`, and links the `numlab` executable against it. That keeps the code reusable for unit tests: a `tests/CMakeLists.txt` file is picked up automatically once it exists.
 
 ## Build and run
 
@@ -128,7 +133,7 @@ g++ -std=c++20 -Iinclude src/*/*.cpp apps/main.cpp -o numlab
 ./numlab
 ```
 
-A GitHub Actions workflow (`.github/workflows/build.yml`) builds the project on Linux, Windows and macOS for every push.
+A GitHub Actions workflow (`.github/workflows/build.yml`) runs on every push to `main` and on every pull request. It builds the project on Linux, Windows and macOS, runs the unit tests once a `tests/` folder exists, and finishes with a smoke test that feeds `5 + 3` to the program and checks that it prints `Answer : 8`.
 
 ## Roadmap
 
