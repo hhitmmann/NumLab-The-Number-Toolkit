@@ -31,6 +31,6 @@ jobs:
         run: |
           exe=./build/numlab
           [ -f "$exe" ] || exe=./build/Release/numlab.exe
-          out=$(printf '1\n5\n+\n3\nn\n0\n' | "$exe")
+          out=$(printf '1\n5\n+\n+\n3\nn\n0\n' | "$exe")
           echo "$out"
           echo "$out" | grep -F "Answer : 8"
