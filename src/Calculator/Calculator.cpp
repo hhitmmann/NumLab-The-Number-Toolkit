@@ -13,7 +13,8 @@
 
 double n1{}, n2{},n3{}, memory{}; // Global variables to store numbers and memory
 bool firstrun = true;
-std::string op1,op2;
+bool choice_selected = false;
+std::string op1,op2,choice;
 
 void Calculator(){
     std::cout << std::setprecision(15);
@@ -24,20 +25,48 @@ void Calculator(){
 
         // memory is the "current value": typed in on the first round,
         // the previous answer on every round after that.
-        if(FirstLoop){
-            if(!readNumber("Enter the first number : ", memory)) return;
-            FirstLoop = false;
+        std::cout<<"1   ->  Enter number first\n";
+        std::cout<<"2   ->  Enter operator first\n";
+        std::cout<<"Enter your choice : ";
+        if(!(std::cin>>choice)) return;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        if(choice=="1"){
+            choice_selected = true;
+            if(FirstLoop){
+                if(!readNumber("Enter the first number : ", memory)) return;
+                FirstLoop = false;
+            }
+            else{
+                std::cout<<"First number (carried over) : "<<memory<<"\n";
+            }
+            n1 = memory;
+            std::cout<<"Enter Your Operato : ";
+            if(!(std::cin>>op1)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            CalculatorChoices(op1);
+            if(!std::isfinite(memory)) memory = n1;   // a failed calculation keeps the old value 
+        }
+        else if(choice=="2"){
+            choice_selected = false;
+            std::cout<<"Enter Your Operator : ";
+            if(!(std::cin>>op1)) return;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(FirstLoop){
+                if(!readNumber("Enter the first number : ", memory)) return;
+                FirstLoop = false;
+            }
+            else{
+                std::cout<<"First number (carried over) : "<<memory<<"\n";
+            }
+            n1 = memory;
+            CalculatorChoices(op1);
+            if(!std::isfinite(memory)) memory = n1;   // a failed calculation keeps the old value
         }
         else{
-            std::cout<<"First number (carried over) : "<<memory<<"\n";
+            std::cout<<"Invalid Choice! Try again.\n";
+            continue;
         }
-        n1 = memory;
-
-        
-        std::cout<<"Enter Your Operator : ";
-        if(!(std::cin>>op1)) return;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        CalculatorChoices(op1);   // asks only for what is still missing, prints "Answer" on success
     }
     while(askYesNo("Do you want to continue with Calculations? (y/n) : "));
 }
@@ -73,15 +102,6 @@ void CalculatorUI(){
 // n1 (the first number) is already set by Calculator(), so each branch only asks
 // for what it still needs: the second number, or the log base.
 
-/*if(firstrun){
-            firstrun = false;
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            CalculatorChoices(op2);
-        }
-*/
-
 void CalculatorChoices(std::string &op){
     if(op=="+"){
         if(firstrun){
@@ -90,7 +110,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             if(op1=="+" && op2=="+"){
             }
             else if(op1=="+" && op2=="-"){ 
@@ -119,7 +141,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             if(op1=="-" && op2=="-"){
             }
             else if(op1=="-" && op2=="+"){ 
@@ -142,42 +166,70 @@ void CalculatorChoices(std::string &op){
         }
     }
     else if(op=="x"){
-        if(firstrun){
-            firstrun = false;
-            std::cout<<"Multiplication is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            CalculatorChoices(op2);
-            memory = multiply(n1,memory);
-            showAnswer(memory);
+        if(choice_selected){
+            if(firstrun){
+                firstrun = false;
+                std::cout<<"Multiplication is selected\n";
+                std::cout<<"Enter Your 2nd Operator : ";
+                if(!(std::cin>>op2)) return;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                if((op1=="x" && op2=="x") || (op1=="x" && op2=="/") || (op1=="x" && op2=="!") || (op1=="x" && op2=="mod")){
+                    choice_selected = false;
+                }
+                else{
+                    choice_selected = true;
+                }
+                CalculatorChoices(op2);
+                if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+                memory = multiply(n1,memory);
+                showAnswer(memory);
+                choice_selected = false;
+            }
+            else{
+                firstrun = true;
+                if(!readNumber("Enter the second number : ", n2)) return;
+                if(!readNumber("Enter the 3rd number : ", n3)) return;
+                memory = multiply(n2,n3);
+                showAnswer(memory);
+            }
         }
         else{
-            firstrun = true;
-            if(!readNumber("Enter the second number : ", n2)) return;
-            if(!readNumber("Enter the 3rd number : ", n3)) return;
-            memory = multiply(n2,n3);
-            showAnswer(memory);
+            std::cout<<"Can not perform this operation at this point!\n";
         }
+        
     }
     else if(op=="/"){
-        if(firstrun){
-            firstrun = false;
-            std::cout<<"Division is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            CalculatorChoices(op2);
-            memory = divide(n1,memory);
-            showAnswer(memory);
+        if(choice_selected){
+            if(firstrun){
+                firstrun = false;
+                std::cout<<"Division is selected\n";
+                std::cout<<"Enter Your 2nd Operator : ";
+                if(!(std::cin>>op2)) return;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                if((op1=="/" && op2=="x") || (op1=="/" && op2=="/") || (op1=="/" && op2=="!") || (op1=="/" && op2=="mod")){
+                    choice_selected = false;
+                }
+                else{
+                    choice_selected = true;
+                }
+                CalculatorChoices(op2);
+                if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+                memory = divide(n1,memory);
+                showAnswer(memory);
+                choice_selected = false;
+            }
+            else{
+                firstrun = true;
+                if(!readNumber("Enter the second number : ", n2)) return;
+                if(!readNumber("Enter the 3rd number : ", n3)) return;
+                memory = divide(n2,n3);
+                showAnswer(memory);
+            }
         }
         else{
-            firstrun = true;
-            if(!readNumber("Enter the second number : ", n2)) return;
-            if(!readNumber("Enter the 3rd number : ", n3)) return;
-            memory = divide(n2,n3);
-            showAnswer(memory);
+            std::cout<<"Can not use Division at start!\n";
         }
+        
     }
     else if(op=="^"){
         if(firstrun){
@@ -187,6 +239,7 @@ void CalculatorChoices(std::string &op){
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = power(n1,memory);
             showAnswer(memory);
         }
@@ -199,40 +252,67 @@ void CalculatorChoices(std::string &op){
         }
     }
     else if(op=="mod"){
-        if(firstrun){
-            firstrun = false;
-            std::cout<<"Modulus is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            CalculatorChoices(op2);
-            memory = modulus(n1,memory);
-            showAnswer(memory);
+        if(choice_selected){
+            if(firstrun){
+                firstrun = false;
+                std::cout<<"modulus is selected\n";
+                std::cout<<"Enter Your 2nd Operator : ";
+                if(!(std::cin>>op2)) return;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                if((op1=="mod" && op2=="x") || (op1=="mod" && op2=="/") || (op1=="mod" && op2=="!") || (op1=="mod" && op2=="mod")){
+                    choice_selected = false;
+                }
+                else{
+                    choice_selected = true;
+                }
+                CalculatorChoices(op2);
+                if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+                memory = modulus(n1,memory);
+                showAnswer(memory);
+                choice_selected = false;
+            }
+            else{
+                firstrun = true;
+                if(!readNumber("Enter the second number : ", n2)) return;
+                if(!readNumber("Enter the 3rd number : ", n3)) return;
+                memory = modulus(n2,n3);
+                showAnswer(memory);
+            }
         }
         else{
-            firstrun = true;
-            if(!readNumber("Enter the second number : ", n2)) return;
-            if(!readNumber("Enter the 3rd number : ", n3)) return;
-            memory = modulus(n2,n3);
-            showAnswer(memory);
+            std::cout<<"Can not use modulus at start!\n";
         }
     }
     else if(op=="!"){
-        if(firstrun){
-            firstrun = false;
-            std::cout<<"factorial is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            CalculatorChoices(op2);
-            memory = factorial(memory);
-            showAnswer(memory);
+        if(choice_selected){
+            if(firstrun){
+                firstrun = false;
+                std::cout<<"factorial is selected\n";
+                std::cout<<"Enter Your 2nd Operator : ";
+                if(!(std::cin>>op2)) return;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                if((op1=="!" && op2=="x") || (op1=="!" && op2=="/") || (op1=="!" && op2=="!") || (op1=="!" && op2=="mod")){
+                    choice_selected = false;
+                }
+                else{
+                    choice_selected = true;
+                }
+                CalculatorChoices(op2);
+                if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+                memory = factorial(n1);
+                showAnswer(memory);
+                choice_selected = false;
+            }
+            else{
+                firstrun = true;
+                if(!readNumber("Enter the second number : ", n2)) return;
+                if(!readNumber("Enter the 3rd number : ", n3)) return;
+                memory = factorial(n2);
+                showAnswer(memory);
+            }
         }
         else{
-            firstrun = true;
-            if(!readNumber("Enter the second number : ", n2)) return;
-            memory = factorial(n2);
-            showAnswer(memory);
+            std::cout<<"Can not use factorial at start!\n";
         }
     }
     else if(op=="sqrt"){
@@ -242,7 +322,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = squareRoot(memory);
             showAnswer(memory);
         }
@@ -260,7 +342,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = logarithm(memory);
             showAnswer(memory);
         }
@@ -278,7 +362,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = anti_logarithm(memory);
             showAnswer(memory);
         }
@@ -296,7 +382,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = absolute(memory);
             showAnswer(memory);
         }
@@ -314,7 +402,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = SIN(memory);
             showAnswer(memory);
         }
@@ -332,7 +422,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = COS(memory);
             showAnswer(memory);
         }
@@ -350,7 +442,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = TAN(memory);
             showAnswer(memory);
         }
@@ -368,7 +462,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = ASIN(memory);
             showAnswer(memory);
         }
@@ -386,7 +482,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = ACOS(memory);
             showAnswer(memory);
         }
@@ -404,7 +502,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = ATAN(memory);
             showAnswer(memory);
         }
@@ -422,7 +522,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = SINH(memory);
             showAnswer(memory);
         }
@@ -440,7 +542,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = COSH(memory);
             showAnswer(memory);
         }
@@ -458,7 +562,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = TANH(memory);
             showAnswer(memory);
         }
@@ -476,7 +582,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = ASINH(memory);
             showAnswer(memory);
         }
@@ -494,7 +602,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = ACOSH(memory);
             showAnswer(memory);
         }
@@ -512,7 +622,9 @@ void CalculatorChoices(std::string &op){
             std::cout<<"Enter Your 2nd Operator : ";
             if(!(std::cin>>op2)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            choice_selected = true;
             CalculatorChoices(op2);
+            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
             memory = ATANH(memory);
             showAnswer(memory);
         }
