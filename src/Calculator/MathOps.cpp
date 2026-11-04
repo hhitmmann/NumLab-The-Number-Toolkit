@@ -11,7 +11,7 @@ static bool readBase(const char *prompt, char &out);
 static double Radians_To_Degree(double Rad);
 static double Degree_To_Radians(double Degree);
 
-long double pi = std::numbers::pi_v<long double>;
+static constexpr long double pi = std::numbers::pi_v<long double>;
 
 double add(double a, double b){
     return (a + b);
@@ -41,18 +41,18 @@ double divide(double a, double b){
 }
 
 double power(double base, double exponent){
-        if(std::isnan(std::pow(base, exponent))){
-            std::cout<<"Answer is not a real number\n";
-            return std::nan("");
-        }
-        else if(std::isinf(std::pow(base, exponent))){
-            std::cout<<"Answer is infinite (overflow or zero to a negative power)\n";
-            return std::numeric_limits<double>::infinity();
-        }
-        else{
-            return std::pow(base, exponent);
-        }
-    
+    double r = std::pow(base, exponent);
+    if(std::isnan(r)){
+        std::cout<<"Answer is not a real number\n";
+        return std::nan("");
+    }
+    else if(std::isinf(r)){
+        std::cout<<"Answer is infinite (overflow or zero to a negative power)\n";
+        return std::numeric_limits<double>::infinity();
+    }
+    else{
+        return r;
+    }
 }
 
 double modulus(double a, double b){

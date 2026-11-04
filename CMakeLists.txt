@@ -6,6 +6,26 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Without a build type CMake compiles with no optimisation at all, so default to Release.
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+endif()
+
+# Release: optimise for small size.
+if(MSVC)
+    set(CMAKE_CXX_FLAGS_RELEASE "/O1 /DNDEBUG")
+else()
+    set(CMAKE_CXX_FLAGS_RELEASE "-Os -DNDEBUG")
+endif()
+
+
+include(CheckIPOSupported)
+check_ipo_supported(RESULT NUMLAB_IPO_OK OUTPUT NUMLAB_IPO_MSG LANGUAGES CXX)
+if(NUMLAB_IPO_OK)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE ON)
+endif()
+
+
 # Everything except main() lives in a library, so the tests can link against it too.
 add_library(numlab_core
     src/base_converter/Base_Converter.cpp
@@ -27,9 +47,18 @@ foreach(target numlab_core numlab)
     if(MSVC)
         target_compile_options(${target} PRIVATE /W4)
     else()
-        target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic)
+                target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic -ffunction-sections -fdata-sections)
     endif()
 endforeach()
+
+
+# Release executable: drop unused sections and (on Linux / MinGW) strip the symbol table.
+if(APPLE)
+    target_link_options(numlab PRIVATE "$<$<CONFIG:Release>:-Wl,-dead_strip>")
+elseif(NOT MSVC)
+    target_link_options(numlab PRIVATE "$<$<CONFIG:Release>:-Wl,--gc-sections>" "$<$<CONFIG:Release>:-s>")
+endif()
+
 
 # Unit tests: picked up automatically once a tests/CMakeLists.txt file exists.
 enable_testing()
