@@ -6,15 +6,16 @@
 #include <cmath>
 #include <limits>
 #include <iomanip>
-#include <cctype>
 #include <string>
-#include <algorithm>
 
 
-double n1{}, n2{},n3{}, memory{}; // Global variables to store numbers and memory
-bool firstrun = true;
-bool choice_selected = false;
-std::string op1,op2,choice;
+double memory{};                    // current value; UI_Choices.cpp uses it too, so it can not be static
+static double n1{}, n2{}, n3{};     // first, second and third numbers
+static bool firstrun = true;
+static bool choice_selected = false;
+static std::string op1, op2, choice;
+static bool readOp2();
+static bool nestedFailed();
 
 void Calculator(){
     std::cout << std::setprecision(15);
@@ -41,7 +42,7 @@ void Calculator(){
                 std::cout<<"First number (carried over) : "<<memory<<"\n";
             }
             n1 = memory;
-            std::cout<<"Enter Your Operato : ";
+            std::cout<<"Enter Your Operator : ";
             if(!(std::cin>>op1)) return;
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             CalculatorChoices(op1);
@@ -107,12 +108,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"Addition is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             if(op1=="+" && op2=="+"){
             }
             else if(op1=="+" && op2=="-"){ 
@@ -138,12 +137,10 @@ void CalculatorChoices(std::string &op){
        if(firstrun){
             firstrun = false;
             std::cout<<"Subtraction is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             if(op1=="-" && op2=="-"){
             }
             else if(op1=="-" && op2=="+"){ 
@@ -170,9 +167,7 @@ void CalculatorChoices(std::string &op){
             if(firstrun){
                 firstrun = false;
                 std::cout<<"Multiplication is selected\n";
-                std::cout<<"Enter Your 2nd Operator : ";
-                if(!(std::cin>>op2)) return;
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                if(!readOp2()) return;
                 if((op1=="x" && op2=="x") || (op1=="x" && op2=="/") || (op1=="x" && op2=="!") || (op1=="x" && op2=="mod")){
                     choice_selected = false;
                 }
@@ -180,7 +175,7 @@ void CalculatorChoices(std::string &op){
                     choice_selected = true;
                 }
                 CalculatorChoices(op2);
-                if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+                if(nestedFailed()) return;
                 memory = multiply(n1,memory);
                 showAnswer(memory);
                 choice_selected = false;
@@ -203,9 +198,7 @@ void CalculatorChoices(std::string &op){
             if(firstrun){
                 firstrun = false;
                 std::cout<<"Division is selected\n";
-                std::cout<<"Enter Your 2nd Operator : ";
-                if(!(std::cin>>op2)) return;
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                if(!readOp2()) return;
                 if((op1=="/" && op2=="x") || (op1=="/" && op2=="/") || (op1=="/" && op2=="!") || (op1=="/" && op2=="mod")){
                     choice_selected = false;
                 }
@@ -213,7 +206,7 @@ void CalculatorChoices(std::string &op){
                     choice_selected = true;
                 }
                 CalculatorChoices(op2);
-                if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+                if(nestedFailed()) return;
                 memory = divide(n1,memory);
                 showAnswer(memory);
                 choice_selected = false;
@@ -235,11 +228,9 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"power is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = power(n1,memory);
             showAnswer(memory);
         }
@@ -256,9 +247,7 @@ void CalculatorChoices(std::string &op){
             if(firstrun){
                 firstrun = false;
                 std::cout<<"modulus is selected\n";
-                std::cout<<"Enter Your 2nd Operator : ";
-                if(!(std::cin>>op2)) return;
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                if(!readOp2()) return;
                 if((op1=="mod" && op2=="x") || (op1=="mod" && op2=="/") || (op1=="mod" && op2=="!") || (op1=="mod" && op2=="mod")){
                     choice_selected = false;
                 }
@@ -266,7 +255,7 @@ void CalculatorChoices(std::string &op){
                     choice_selected = true;
                 }
                 CalculatorChoices(op2);
-                if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+                if(nestedFailed()) return;
                 memory = modulus(n1,memory);
                 showAnswer(memory);
                 choice_selected = false;
@@ -288,9 +277,7 @@ void CalculatorChoices(std::string &op){
             if(firstrun){
                 firstrun = false;
                 std::cout<<"factorial is selected\n";
-                std::cout<<"Enter Your 2nd Operator : ";
-                if(!(std::cin>>op2)) return;
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                if(!readOp2()) return;
                 if((op1=="!" && op2=="x") || (op1=="!" && op2=="/") || (op1=="!" && op2=="!") || (op1=="!" && op2=="mod")){
                     choice_selected = false;
                 }
@@ -298,7 +285,7 @@ void CalculatorChoices(std::string &op){
                     choice_selected = true;
                 }
                 CalculatorChoices(op2);
-                if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+                if(nestedFailed()) return;
                 memory = factorial(n1);
                 showAnswer(memory);
                 choice_selected = false;
@@ -319,12 +306,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"Square root is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = squareRoot(memory);
             showAnswer(memory);
         }
@@ -339,12 +324,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"Logarithm is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = logarithm(memory);
             showAnswer(memory);
         }
@@ -359,12 +342,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"Anti-Logarithm is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = anti_logarithm(memory);
             showAnswer(memory);
         }
@@ -379,12 +360,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"Absolute value is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = absolute(memory);
             showAnswer(memory);
         }
@@ -399,12 +378,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"sin function is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = SIN(memory);
             showAnswer(memory);
         }
@@ -419,12 +396,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"cos function is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = COS(memory);
             showAnswer(memory);
         }
@@ -439,12 +414,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"tan function is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = TAN(memory);
             showAnswer(memory);
         }
@@ -459,12 +432,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"Inverse sin function is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = ASIN(memory);
             showAnswer(memory);
         }
@@ -479,12 +450,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"Inverse cos function is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = ACOS(memory);
             showAnswer(memory);
         }
@@ -499,12 +468,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"Inverse tan function is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = ATAN(memory);
             showAnswer(memory);
         }
@@ -519,12 +486,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"sinh function is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = SINH(memory);
             showAnswer(memory);
         }
@@ -539,12 +504,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"cosh function is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = COSH(memory);
             showAnswer(memory);
         }
@@ -559,12 +522,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"tanh function is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = TANH(memory);
             showAnswer(memory);
         }
@@ -579,12 +540,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"Inverse sinh function is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = ASINH(memory);
             showAnswer(memory);
         }
@@ -599,12 +558,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"Inverse cosh function is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = ACOSH(memory);
             showAnswer(memory);
         }
@@ -619,12 +576,10 @@ void CalculatorChoices(std::string &op){
         if(firstrun){
             firstrun = false;
             std::cout<<"Inverse tanh function is selected\n";
-            std::cout<<"Enter Your 2nd Operator : ";
-            if(!(std::cin>>op2)) return;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            if(!readOp2()) return;
             choice_selected = true;
             CalculatorChoices(op2);
-            if(!firstrun || !std::isfinite(memory)){ firstrun = true; return; }
+            if(nestedFailed()) return;
             memory = ATANH(memory);
             showAnswer(memory);
         }
@@ -638,4 +593,19 @@ void CalculatorChoices(std::string &op){
     else{
         std::cout<<"Wrong operator entered!\nThis operator does not exist...\n";
     }
+}
+
+
+// Asks for the 2nd operator and reads it. Returns false only if input is closed (EOF).
+static bool readOp2(){
+    std::cout<<"Enter Your 2nd Operator : ";
+    if(!(std::cin>>op2)) return false;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    return true;
+}
+
+// Call after the 2nd operator ran: true if it did not finish or gave no usable answer.
+static bool nestedFailed(){
+    if(!firstrun || !std::isfinite(memory)){ firstrun = true; return true; }
+    return false;
 }

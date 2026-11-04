@@ -209,6 +209,19 @@ Then run the program:
 - Linux / macOS: `./build/numlab`
 - Windows: `build\numlab.exe` (with the Visual Studio generator it is in `build\Debug\`)
 
+With a single-configuration generator (Makefiles, Ninja) the default is a **Release** build, optimised for size, with unused code removed and the symbol table stripped, so the executable is small. With the Visual Studio generator the configuration is chosen when building, for example `cmake --build build --config Release`.
+
+For scale: with MinGW g++ 14.2 on Windows, the executable went from 141,502 to 33,792 bytes (about 76% smaller) compared with the build before these size optimisations.
+
+**Debug build** (to step through the code in a debugger; the Release build is stripped, so a debugger can not show its source lines):
+
+```
+cmake -S . -B build-debug -DCMAKE_BUILD_TYPE=Debug
+cmake --build build-debug
+```
+
+Run it with `./build-debug/numlab` (Linux / macOS) or `build-debug\numlab.exe` (Windows).
+
 **Without CMake** (g++ on Linux, macOS, or Git Bash on Windows):
 
 ```
